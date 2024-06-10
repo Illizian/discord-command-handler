@@ -12,21 +12,23 @@ final class DiscordInteraction
         public string $id,
         public string $token,
         public int $type,
+        public ?DiscordChannel $channel,
         public ?User $member,
         public ?array $data,
     ) {
-
     }
 
     public static function make(array $json): self
     {
-        $id = Arr::get($json, 'id', null);
-        $token = Arr::get($json, 'token', null);
-        $type = Arr::get($json, 'type', null);
-        $data = Arr::get($json, 'data', null);
+        $id = $json['id'] ??= null;
+        $token = $json['token'] ??= null;
+        $type = $json['type'] ??= null;
+        $data = $json['data'] ??= null;
+        $channel = $json['channel'] ??= null;
 
         $discordId = Arr::get($json, 'member.user.id', null);
         $discordUsername = Arr::get($json, 'member.user.global_name', null);
+        // @NOTE: Not comfortable with DTOs creating Models but here we are
         $member = $discordId && $discordUsername
             ? User::query()->firstOrCreate([
                 'discord_id' => $discordId,
@@ -40,6 +42,9 @@ final class DiscordInteraction
             id: $id,
             token: $token,
             type: $type,
+            channel: ($channel !== null)
+                ? DiscordChannel::make($channel)
+                : null,
             member: $member,
             data: $data,
         );

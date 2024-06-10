@@ -5,35 +5,27 @@ namespace App\DTO;
 use App\Models\User;
 use Illuminate\Support\Arr;
 
+// @TODO: Refactor this to enable it to support multiple commands, for now it assumes the "answered" command
 final class CommandInteraction
 {
     public function __construct(
         public string $name,
-        public array $options,
+        public User $by,
     ) {
     }
 
     public static function make(array $data): self
     {
-        $users = collect(Arr::get($data, 'resolved.users', []))
-            ->mapWithKeys(fn ($user) => [
-                $user['id'] => User::query()->firstOrCreate([
-
-                    'discord_id' => $user['id'],
-                ], [
-                    'discord_id' => $user['id'],
-                    'username' => $user['global_name'],
-                ]),
-            ]);
-
-        $options = collect(Arr::get($data, 'options', []))->map(fn ($option) => [
-            ...$option,
-            // If option is a User type, resolve to the resolved.users
-            'value' => $option['type'] === 6
-                ? $users->get($option['value'])
-                : $option['type'],
+        $byId = Arr::get($data, 'options.0.value', null);
+        $byUsername = Arr::get($data, "resolved.users.$byId.global_name", null);
+        // @NOTE: Not comfortable with DTOs creating Models but here we are
+        $by = User::query()->firstOrCreate([
+            'discord_id' => $byId,
+        ], [
+            'discord_id' => $byId,
+            'username' => $byUsername,
         ]);
 
-        return new self($data['name'], $options->toArray());
+        return new self($data['name'], $by);
     }
 }
