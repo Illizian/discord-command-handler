@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "14a2d64cbb3832fb1e4873cc9f3eaa7a",
+    "content-hash": "b6f6f810dbacdaa1b45bf0ba524413a8",
     "packages": [
         {
             "name": "brick/math",
@@ -6489,6 +6489,51 @@
                 "source": "https://github.com/hamcrest/hamcrest-php/tree/v2.0.1"
             },
             "time": "2020-07-09T08:09:16+00:00"
+        },
+        {
+            "name": "laravel-shift/cli",
+            "version": "v0.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/laravel-shift/cli.git",
+                "reference": "3880b04b1719a96a5ce023da1b31b8f8ec2d1edc"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/laravel-shift/cli/zipball/3880b04b1719a96a5ce023da1b31b8f8ec2d1edc",
+                "reference": "3880b04b1719a96a5ce023da1b31b8f8ec2d1edc",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.1"
+            },
+            "bin": [
+                "builds/shift-cli"
+            ],
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Shift\\Cli\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "A CLI tool for running automated tasks from Shift",
+            "keywords": [
+                "automation",
+                "cli",
+                "code",
+                "laravel",
+                "php",
+                "refactor"
+            ],
+            "support": {
+                "issues": "https://github.com/laravel-shift/cli/issues",
+                "source": "https://github.com/laravel-shift/cli/tree/v0.3.1"
+            },
+            "time": "2024-06-14T13:55:37+00:00"
         },
         {
             "name": "laravel/pint",
