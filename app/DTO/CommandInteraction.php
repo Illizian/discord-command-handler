@@ -2,30 +2,47 @@
 
 namespace App\DTO;
 
-use App\Models\User;
 use Illuminate\Support\Arr;
 
 // @TODO: Refactor this to enable it to support multiple commands, for now it assumes the "answered" command
 final class CommandInteraction
 {
     public function __construct(
-        public string $name,
-        public User $by,
+        public array $options,
+        public string $route,
+        public array $resolved
     ) {
     }
 
-    public static function make(array $data): self
+    public static function make(array $data, string $route = '', array $resolved = []): self
     {
-        $byId = Arr::get($data, 'options.0.value', null);
-        $byUsername = Arr::get($data, "resolved.users.$byId.global_name", null);
-        // @NOTE: Not comfortable with DTOs creating Models but here we are
-        $by = User::query()->firstOrCreate([
-            'discord_id' => $byId,
-        ], [
-            'discord_id' => $byId,
-            'username' => $byUsername,
-        ]);
+        $name = Arr::get($data, 'name', '');
+        $options = Arr::get($data, 'options', []);
+        $child = Arr::get($data, 'options.0.type', null);
+        $resolutions = [
+            ...$resolved,
+            ...Arr::get($data, 'resolved', []),
+        ];
 
-        return new self($data['name'], $by);
+        ray($route, $name);
+
+        if (count($options) === 0 || $child !== 1) {
+            return new self(
+                collect($options)
+                    ->mapWithKeys(
+                        fn ($option) => [
+                            $option['name'] => [
+                                'type' => $option['type'],
+                                'value' => $option['value'],
+                            ],
+                        ]
+                    )
+                    ->toArray(),
+                "$route/$name",
+                $resolutions
+            );
+        }
+
+        return self::make($data['options'][0], "$route/$name", $resolutions);
     }
 }
