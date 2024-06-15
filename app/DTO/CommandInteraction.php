@@ -3,14 +3,15 @@
 namespace App\DTO;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 
 // @TODO: Refactor this to enable it to support multiple commands, for now it assumes the "answered" command
 final class CommandInteraction
 {
     public function __construct(
-        public array $options,
         public string $route,
-        public array $resolved
+        public Collection $options,
+        public Collection $resolved
     ) {
     }
 
@@ -24,10 +25,9 @@ final class CommandInteraction
             ...Arr::get($data, 'resolved', []),
         ];
 
-        ray($route, $name);
-
         if (count($options) === 0 || $child !== 1) {
             return new self(
+                "$route/$name",
                 collect($options)
                     ->mapWithKeys(
                         fn ($option) => [
@@ -36,10 +36,8 @@ final class CommandInteraction
                                 'value' => $option['value'],
                             ],
                         ]
-                    )
-                    ->toArray(),
-                "$route/$name",
-                $resolutions
+                    ),
+                collect($resolutions)
             );
         }
 

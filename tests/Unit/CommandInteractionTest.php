@@ -14,7 +14,7 @@ test('CommandInteraction parses a simple command', function () {
     ]);
 
     expect($command->route)->toBe('/command');
-    expect($command->options)->toBe([]);
+    expect($command->options->count())->toBe(0);
 });
 
 test('CommandInteraction parses a simple command with parameters', function () {
@@ -33,11 +33,11 @@ test('CommandInteraction parses a simple command with parameters', function () {
     ]);
 
     expect($command->route)->toBe('/command');
-    expect($command->options)->toBe([
-        'parameter' => [
-            'type' => 6,
-            'value' => '333333333333333333',
-        ],
+    expect($command->options->count())->toBe(1);
+    expect($command->options->has('parameter'))->toBeTrue();
+    expect($command->options->get('parameter'))->toBe([
+        'type' => 6,
+        'value' => '333333333333333333',
     ]);
 });
 
@@ -63,10 +63,10 @@ test('CommandInteraction parses a command with subcommand & parameters', functio
     ]);
 
     expect($command->route)->toBe('/command/subcommand');
-    expect($command->options)->toBe([
-        'parameter' => [
-            'type' => 6,
-            'value' => '333333333333333333',
-        ],
+    expect($command->options->count())->toBe(1);
+    expect($command->options->has('parameter'))->toBeTrue();
+    expect($command->options->get('parameter'))->toBe([
+        'type' => 6,
+        'value' => '333333333333333333',
     ]);
 });
