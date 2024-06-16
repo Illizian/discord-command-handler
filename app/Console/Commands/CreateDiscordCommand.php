@@ -54,8 +54,7 @@ class CreateDiscordCommand extends Command
                 'Authorization' => "Bot $token",
             ])
             ->post(
-                // @TODO: Using guild id here, before we apply command globally.
-                "https://discord.com/api/v10/applications/$appId/guilds/331884122010025986/commands",
+                "https://discord.com/api/v10/applications/$appId/commands",
                 self::CONFIG
             );
 
