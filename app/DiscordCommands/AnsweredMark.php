@@ -22,13 +22,10 @@ final class AnsweredMark implements DiscordCommand
             return response()->error('This command can only be used in threads.');
         }
 
-        // @TODO: Because @needle creates auto-threads, it is the owner. Need to
-        //        find a more reliable means to track the owner (first message?)
-        //
         // Member is thread owner
-        // if ($interaction->channel->owner_id !== $interaction->member->discord_id) {
-        //     return response()->error('This command can only be used by the thread owner.');
-        // }
+        if ($interaction->channel->owner_id !== $interaction->member->discord_id) {
+            return response()->error('This command can only be used by the thread owner.');
+        }
 
         // Member hasn't elected themselves as answerer
         if ($by->discord_id === $interaction->member->discord_id) {
