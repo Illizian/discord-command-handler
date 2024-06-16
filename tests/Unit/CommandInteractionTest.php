@@ -26,8 +26,8 @@ test('CommandInteraction parses a simple command with parameters', function () {
         'options' => [
             [
                 'name' => 'parameter',
-                'type' => 6,
-                'value' => '333333333333333333',
+                'type' => 3,
+                'value' => 'foo',
             ],
         ],
     ]);
@@ -36,8 +36,8 @@ test('CommandInteraction parses a simple command with parameters', function () {
     expect($command->options->count())->toBe(1);
     expect($command->options->has('parameter'))->toBeTrue();
     expect($command->options->get('parameter'))->toBe([
-        'type' => 6,
-        'value' => '333333333333333333',
+        'type' => 3,
+        'value' => 'foo',
     ]);
 });
 
@@ -54,8 +54,8 @@ test('CommandInteraction parses a command with subcommand & parameters', functio
                 'options' => [
                     [
                         'name' => 'parameter',
-                        'type' => 6,
-                        'value' => '333333333333333333',
+                        'type' => 3,
+                        'value' => 'foo',
                     ],
                 ],
             ],
@@ -66,7 +66,7 @@ test('CommandInteraction parses a command with subcommand & parameters', functio
     expect($command->options->count())->toBe(1);
     expect($command->options->has('parameter'))->toBeTrue();
     expect($command->options->get('parameter'))->toBe([
-        'type' => 6,
-        'value' => '333333333333333333',
+        'type' => 3,
+        'value' => 'foo',
     ]);
 });

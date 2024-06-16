@@ -11,6 +11,8 @@ class DiscordValidateRequest
 {
     public function handle(Request $request, Closure $next): Response
     {
+        ray('Validating Discord Request');
+
         $publicKey = config('services.discord.public_key');
         $signature = $request->header('X-Signature-Ed25519');
         $timestamp = $request->header('X-Signature-Timestamp');

@@ -2,7 +2,9 @@
 
 namespace Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
+
 uses(
     TestCase::class,
-    // Illuminate\Foundation\Testing\RefreshDatabase::class,
+    RefreshDatabase::class,
 )->in('Feature');

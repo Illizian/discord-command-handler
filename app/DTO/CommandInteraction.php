@@ -2,16 +2,16 @@
 
 namespace App\DTO;
 
+use App\Models\User;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 
-// @TODO: Refactor this to enable it to support multiple commands, for now it assumes the "answered" command
 final class CommandInteraction
 {
     public function __construct(
         public string $route,
         public Collection $options,
-        public Collection $resolved
+        protected array $resolved
     ) {
     }
 
@@ -26,21 +26,40 @@ final class CommandInteraction
         ];
 
         if (count($options) === 0 || $child !== 1) {
-            return new self(
-                "$route/$name",
-                collect($options)
-                    ->mapWithKeys(
-                        fn ($option) => [
-                            $option['name'] => [
-                                'type' => $option['type'],
-                                'value' => $option['value'],
-                            ],
-                        ]
-                    ),
-                collect($resolutions)
-            );
+            return
+                new self(
+                    route: "$route/$name",
+                    options: collect($options)
+                        ->mapWithKeys(
+                            fn ($option) => [
+                                $option['name'] => [
+                                    'type' => $option['type'],
+                                    'value' => $option['value'],
+                                ],
+                            ]
+                        ),
+                    resolved: $resolutions
+                );
         }
 
         return self::make($data['options'][0], "$route/$name", $resolutions);
+    }
+
+    /**
+     * @return Collection<string, User>
+     */
+    public function resolve(): Collection
+    {
+        $users = Arr::get($this->resolved, 'users', []);
+
+        return collect($users)
+            ->mapWithKeys(fn ($user) => [
+                $user['id'] => User::query()->firstOrCreate([
+                    'discord_id' => $user['id'],
+                ], [
+                    'discord_id' => $user['id'],
+                    'username' => $user['username'],
+                ]),
+            ]);
     }
 }
