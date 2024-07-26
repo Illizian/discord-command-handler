@@ -23,9 +23,9 @@ final class AnsweredMark implements DiscordCommand
         }
 
         // Member is thread owner
-        if ($interaction->channel->owner_id !== $interaction->member->discord_id) {
-            return response()->error('This command can only be used by the thread owner.');
-        }
+        //if ($interaction->channel->owner_id !== $interaction->member->discord_id) {
+        //    return response()->error('This command can only be used by the thread owner.');
+        //}
 
         // Member hasn't elected themselves as answerer
         if ($by->discord_id === $interaction->member->discord_id) {
