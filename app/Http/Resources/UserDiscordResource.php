@@ -20,8 +20,8 @@ class UserDiscordResource extends JsonResource
             'fields' => [
                 [
                     'name' => 'Questions:',
-                    'value' => '12',
-                    'inline' => $countQuestions,
+                    'value' => $countQuestions,
+                    'inline' => true,
                 ],
                 [
                     'name' => 'Answers:',
